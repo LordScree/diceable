@@ -18,9 +18,16 @@ public class Game
             return;
         }
 
-        StoredDice = new List<Dice>(
-            GameDice.Where(die => types.Contains(die.DiceType))
-        );
+        StoredDice = new List<Dice>();
+        foreach (var type in types)
+        {
+            var diceToStore = GameDice.SingleOrDefault(die => type.Equals(die.DiceType, StringComparison.InvariantCultureIgnoreCase));
+
+            if (diceToStore != null)
+            {
+                StoredDice.Add(diceToStore);
+            }
+        }
     }
 
     private void ResetStoredDice()
