@@ -4,20 +4,7 @@ DiceFactory factory = new LetterDiceFactory();
 IDiceGame diceGame = new DiceableGame(factory);
 
 Game g = new Game(diceGame);
-
-/*
 PrintDice(g);
-
-// store some dice.
-g.StoreDice("Z", "Y", "?", "Q");
-
-PrintDice(g);
-
-g.RollUnstoredDice();
-
-PrintDice(g);
-*/
-
 RequestInput();
 
 void RequestInput()
@@ -57,9 +44,13 @@ bool ResolveUserInput(string? userAction)
     {
         HandleRollCommand();
     }
-    else if(userAction.Equals("print", StringComparison.InvariantCultureIgnoreCase))
+    else if (userAction.Equals("print", StringComparison.InvariantCultureIgnoreCase))
     {
         HandlePrintCommand();
+    }
+    else if (userAction.Equals("newgame", StringComparison.InvariantCultureIgnoreCase))
+    {
+        HandleNewGameCommand();
     }
     else
     {
@@ -68,6 +59,13 @@ bool ResolveUserInput(string? userAction)
     }
 
     return true;
+}
+
+void HandleNewGameCommand()
+{
+    g = new Game(diceGame);
+    PrintDice(g);
+    Console.WriteLine("What would you like to do? Type \"help\" if unsure!");
 }
 
 void HandlePrintCommand()
@@ -117,14 +115,22 @@ void HandleStoreDiceCommand(string diceToStore)
 void HandleRerollAllCommand()
 {
     Console.Write("Rolling all dice...");
-    g.RollDice();
+    if (!g.RollDice())
+    {
+        Console.WriteLine("You have already used your rolls!");
+        return;
+    }
     Console.WriteLine("Done!");
 }
 
 void HandleRollCommand()
 {
     Console.Write("Rolling all unstored dice...");
-    g.RollUnstoredDice();
+    if (!g.RollUnstoredDice())
+    {
+        Console.WriteLine("You have already used your rolls!");
+        return;
+    }
     Console.WriteLine("Done!");
 }
 
@@ -141,7 +147,9 @@ void HandleHelpCommand()
     Console.WriteLine("              NOTE: Use the dice name, not the current face!");
     Console.WriteLine("reroll all    Re-roll ALL the dice, clearing your stored dice.");
     Console.WriteLine("roll          Roll any unstored dice.");
+    Console.WriteLine("              NOTE: You only have two rerolls/rolls per game!");
     Console.WriteLine("print         Show the dice.");
+    Console.WriteLine("newgame       Start a new game.");
     Console.WriteLine("exit          Exit the game.");
 }
 
