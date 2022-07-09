@@ -208,6 +208,6 @@ void PrintDice(Game g)
 
     foreach (var die in g.GameDice)
     {
-        Console.WriteLine($"{die.CurrentFace.FaceText} - {die.CurrentFace.FaceValue} points ({die.DiceType} die)");
+        Console.WriteLine($"{die.CurrentFace.FaceText} - {die.CurrentFace.FaceValue} points ({die.DiceType} die :: Possible faces: {string.Join(",", die.Faces.Select(x => x.FaceText))})");
     }
 }
