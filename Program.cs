@@ -48,6 +48,10 @@ bool ResolveUserInput(string? userAction)
     {
         HandlePrintCommand();
     }
+    else if(userAction.Equals("score", StringComparison.InvariantCultureIgnoreCase))
+    {
+        HandleScoreCommand();
+    }
     else if (userAction.Equals("newgame", StringComparison.InvariantCultureIgnoreCase))
     {
         HandleNewGameCommand();
@@ -59,6 +63,11 @@ bool ResolveUserInput(string? userAction)
     }
 
     return true;
+}
+
+void HandleScoreCommand()
+{
+    Console.WriteLine($"Your current score is:\t{g.CalculateScore()} points!");
 }
 
 void HandleNewGameCommand()
@@ -149,6 +158,8 @@ void HandleHelpCommand()
     Console.WriteLine("roll          Roll any unstored dice.");
     Console.WriteLine("              NOTE: You only have two rerolls/rolls per game!");
     Console.WriteLine("print         Show the dice.");
+    Console.WriteLine("score         Show the current score of the stored word.");
+    Console.WriteLine("              NOTE: Score is the sum of the dice multiplied by the number of letters.");
     Console.WriteLine("newgame       Start a new game.");
     Console.WriteLine("exit          Exit the game.");
 }

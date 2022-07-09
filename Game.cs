@@ -6,8 +6,6 @@ public class Game
 
     public int Rerolls { get; set; } = 0;
 
-    private object RerollLock = new object();
-
     public Game(IDiceGame diceGame)
     {
         GameDice = diceGame.GetDice();
@@ -89,23 +87,31 @@ public class Game
         return true;
     }
 
+    /// <summary>
+    /// Calculates the current score of stored dice.
+    /// </summary>
+    /// <returns>The score.</returns>
+    public int CalculateScore()
+    {
+        int score = 0;
+        foreach (Dice die in StoredDice)
+        {
+            score = score + die.CurrentFace.FaceValue;
+        }
+        return score * StoredDice.Count();
+    }
+
     /// <returns>True if the roll is permitted, otherwise False.</returns>
     private bool EnforceRerollState(bool reset = false)
     {
         if (reset)
         {
-            lock (RerollLock)
-            {
-                Rerolls = 0;
-                return true;
-            }
-        }
-
-        lock (RerollLock)
-        {
-            if (Rerolls >= 2) return false;
-            Rerolls++;
+            Rerolls = 0;
             return true;
         }
+
+        if (Rerolls >= 2) return false;
+        Rerolls++;
+        return true;
     }
 }
