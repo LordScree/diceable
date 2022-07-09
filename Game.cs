@@ -17,7 +17,7 @@ public class Game
 
     public void StoreDice(params string[] types)
     {
-        if (types == null)
+        if (types.Length == 0)
         {
             ResetStoredDice();
             return;
@@ -76,7 +76,7 @@ public class Game
     {
         if (!EnforceRerollState()) return false;
 
-        if (types == null)
+        if (types.Length == 0)
         {
             RollAllDice();
             return true;
@@ -89,11 +89,12 @@ public class Game
         return true;
     }
 
+    /// <returns>True if the roll is permitted, otherwise False.</returns>
     private bool EnforceRerollState(bool reset = false)
     {
-        if(reset)
+        if (reset)
         {
-            lock(RerollLock)
+            lock (RerollLock)
             {
                 Rerolls = 0;
                 return true;
