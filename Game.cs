@@ -6,8 +6,11 @@ public class Game
 
     public int Rerolls { get; set; } = 0;
 
-    public Game(IDiceGame diceGame)
+    public IWordsDictionary WordsDictionary { get; set; } = null!;
+
+    public Game(IDiceGame diceGame, IWordsDictionary wordsDictionary)
     {
+        WordsDictionary = wordsDictionary;
         GameDice = diceGame.GetDice();
         RollDice();
         EnforceRerollState(true);
@@ -99,6 +102,24 @@ public class Game
             score = score + die.CurrentFace.FaceValue;
         }
         return score * StoredDice.Count();
+    }
+
+    public string CheckWorkMeaning()
+    {
+        string? result;
+        WordsDictionary.Words.TryGetValue(StoredWord().ToLower(), out result);
+
+        if (String.IsNullOrWhiteSpace(result))
+        {
+            return string.Empty;
+        }
+
+        return result;
+    }
+
+    public string StoredWord()
+    {
+        return String.Join("", StoredDice.Select(die => die.CurrentFace.FaceText));
     }
 
     /// <returns>True if the roll is permitted, otherwise False.</returns>

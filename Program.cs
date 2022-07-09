@@ -2,8 +2,10 @@
 Globals.RNG = new Random();
 DiceFactory factory = new LetterDiceFactory();
 IDiceGame diceGame = new DiceableGame(factory);
+IWordsDictionary words = new BritishDictionary();
+words.LoadDictionaryData();
 
-Game g = new Game(diceGame);
+Game g = new Game(diceGame, words);
 PrintDice(g);
 RequestInput();
 
@@ -52,6 +54,10 @@ bool ResolveUserInput(string? userAction)
     {
         HandleScoreCommand();
     }
+    else if(userAction.Equals("check", StringComparison.InvariantCultureIgnoreCase))
+    {
+        HandleCheckCommand();
+    }
     else if (userAction.Equals("newgame", StringComparison.InvariantCultureIgnoreCase))
     {
         HandleNewGameCommand();
@@ -65,6 +71,20 @@ bool ResolveUserInput(string? userAction)
     return true;
 }
 
+void HandleCheckCommand()
+{
+    var wordMeaning = g.CheckWorkMeaning();
+    if (string.IsNullOrWhiteSpace(wordMeaning))
+    {
+        Console.WriteLine($"Your current word ({g.StoredWord()}) does not appear in the dictionary.");
+    }
+    else
+    {
+        Console.WriteLine($"Your current word ({g.StoredWord()}) appears in the dictionary, with the following meaning:");
+        Console.WriteLine(wordMeaning);
+    }
+}
+
 void HandleScoreCommand()
 {
     Console.WriteLine($"Your current score is:\t{g.CalculateScore()} points!");
@@ -72,7 +92,7 @@ void HandleScoreCommand()
 
 void HandleNewGameCommand()
 {
-    g = new Game(diceGame);
+    g = new Game(diceGame, words);
     PrintDice(g);
     Console.WriteLine("What would you like to do? Type \"help\" if unsure!");
 }
