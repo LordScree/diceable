@@ -7,5 +7,4 @@ Like scrabble, but with dice.
 3. Call dotnet run.
 
 # TODO
- - Hook up to dictionary to check word is valid.
  - .... OTHER.

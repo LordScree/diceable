@@ -180,6 +180,7 @@ void HandleHelpCommand()
     Console.WriteLine("print         Show the dice.");
     Console.WriteLine("score         Show the current score of the stored word.");
     Console.WriteLine("              NOTE: Score is the sum of the dice multiplied by the number of letters.");
+    Console.WriteLine("check         Check your word appears in the dictionary.");
     Console.WriteLine("newgame       Start a new game.");
     Console.WriteLine("exit          Exit the game.");
 }
